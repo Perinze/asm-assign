@@ -1,0 +1,83 @@
+	.file	"To_Upper.s"
+	.text
+	.globl	To_Upper
+	.type	To_Upper, @function
+
+/* **********************
+    Name:
+    Wisc ID Number:
+    Wisc Email:
+************************ */
+
+
+To_Upper:
+
+# C version
+/* **********************
+    Write the equivalent C code to this function here (in the comment block)
+
+void To_Upper(char *str) {
+    char *p;
+    for (p = str; *p != 0; p++)
+        if (*p >= 97 && *p <= 122)
+            *p -= 32;
+}
+
+************************ */
+
+
+# Memory Layout
+/* ************************ 
+    Make a table showing the stack frame for your function (in the comment block)
+    The first column should have a memory address (e.g. 8(%rsp))
+    The second column should be the name of the C variable used above
+    Update the example below with your variables and memory addresses
+        %rax    |   str
+        %rdx    |   i
+        %cl     |   c
+************************ */
+
+
+# Prologue
+
+
+# This code prints the letter 'a' (ascii value 97)
+# Use this for debugging
+# Comment out when finished - your function should not print anything
+# Note putchar overwrites all caller saved registers including argument registers
+	movl	$97, %eax
+	movl	%eax, %edi
+	call	putchar@PLT
+
+
+# Body of function
+    movq    %rdi    , %rax
+loop:
+    movl    (%rax)  , %cl
+    cmp     %cl     , 0
+    je      end
+
+not_end:
+    cmp     %cl     , 97
+    jge     greater_than_or_equal_to_a
+
+not_lower_char:
+    jmp     increase
+
+greater_than_or_equal_to_a:
+    cmp     %cl     , 122
+    jle     less_than_or_equal_to_z:
+    jmp     end
+
+less_than_or_equal_to_z:
+    subl    32      , %cl
+    jmp     increase
+
+increase:
+    inc     %rax
+    jmp     loop
+
+end:
+
+# Epilogue
+    ret
